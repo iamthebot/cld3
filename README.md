@@ -1,9 +1,14 @@
-# Compact Language Detector v3 (CLD3)
+# Compact Language Detector v3 (CLD3) Python Edition
 
 * [Model](#model)
 * [Installation](#installation)
 * [Contact](#contact)
 * [Credits](#credits)
+
+### Notes
+This is an effort to fix issues with the initial Python fork at https://github.com/Elizafox/cld3
+including memory leaks and no reuse of a Language model for multiple calls. This also pulls in much newer cld3 upstream code.
+
 
 ### Model
 
@@ -27,29 +32,21 @@ To get a language prediction for the input text, we simply perform a forward
 ![Figure](model.png "CLD3")
 
 ### Installation
-CLD3 is designed to run in the Chrome browser, so it relies on code in
-[Chromium](http://www.chromium.org/).
-The steps for building and running the demo of the language detection model are:
+Building the Python wheel requires the protobuf compiler and its headers to be installed.
+If you run into issues with protobufs not compiling, just go into the `src` directory and run
 
-- [check out](http://www.chromium.org/developers/how-tos/get-the-code) the
-  Chromium repository.
-- copy the code to `//third_party/cld_3`
-- Uncomment `language_identifier_main` executable in `src/BUILD.gn`.
-- build and run the model using the commands:
-
-```shell
-gn gen out/Default
-ninja -C out/Default third_party/cld_3/src/src:language_identifier_main
-out/Default/language_identifier_main
 ```
-### Bugs and Feature Requests
+mkdir -p cld_3/protos
+protoc --cpp_out=cld_3/protos *.proto
+```
 
-Open a [GitHub issue](https://github.com/google/cld3/issues) for this repository to file bugs and feature requests.
+To generate a python wheel (from the root of this repo):
 
-### Announcements and Discussion
+```
+python setup.py bdist_wheel
+```
 
-For announcements regarding major updates as well as general discussion list, please subscribe to:
-[cld3-users@googlegroups.com](https://groups.google.com/forum/#!forum/cld3-users)
+Builds have been tested with GCC9.0 on Ubuntu 18.04 and Apple Clang 11.0.0 on OSX 10.15 (Catalina Beta)
 
 ### Credits
 
@@ -71,3 +68,5 @@ Original authors of the code in this package include (in alphabetical order):
 * Slav Petrov
 * Stefan Istrate
 * Terry Koo
+
+and Elizabeth Myers for the original Python bindings
