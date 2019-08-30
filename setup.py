@@ -9,14 +9,14 @@ from distutils.command.build import build
 from Cython.Build import cythonize
 
 
-PROTOS = ["src/sentence.proto", "src/feature_extractor.proto",
-          "src/task_spec.proto"]
+PROTOS = ["sentence.proto", "feature_extractor.proto",
+          "task_spec.proto"]
 
 SOURCES = ["src/cld3.pyx",
            "src/base.cc",
-           "src/cld_3/protos/src/feature_extractor.pb.cc",
-           "src/cld_3/protos/src/sentence.pb.cc",
-           "src/cld_3/protos/src/task_spec.pb.cc",
+           "src/cld_3/protos/feature_extractor.pb.cc",
+           "src/cld_3/protos/sentence.pb.cc",
+           "src/cld_3/protos/task_spec.pb.cc",
            "src/embedding_feature_extractor.cc",
            "src/embedding_network.cc",
            "src/feature_extractor.cc",
@@ -41,7 +41,7 @@ SOURCES = ["src/cld3.pyx",
            "src/utils.cc",
            "src/workspace.cc"]
 
-INCLUDES = ["/usr/local/include","./src", "./src/cld_3/protos/"]
+INCLUDES = ["/usr/local/include","/src", "./src/cld_3/protos/"]
 
 LIBRARIES = ["protobuf"]
 
@@ -70,8 +70,8 @@ class BuildProtobuf(build):
         command = ["protoc"]
         command.extend(PROTOS)
         command.append("--cpp_out={}".format(
-            path.join("src", "cld_3", "protos")))
-        subprocess.run(command, check=True)
+            path.join("cld_3", "protos")))
+        subprocess.run(command, check=True, cwd='src')
 
         build.run(self)
 
@@ -83,6 +83,7 @@ ext = Extension(
     libraries=LIBRARIES,
     language="c++",
     extra_compile_args=["-std=c++11"])
+
 
 setup(
     name="cld3",
