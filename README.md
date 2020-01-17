@@ -2,7 +2,7 @@
 
 * [Model](#model)
 * [Installation](#installation)
-* [Contact](#contact)
+* [Python Usage](#python-usage)
 * [Credits](#credits)
 
 ### Notes
@@ -47,6 +47,23 @@ python setup.py bdist_wheel
 ```
 
 Builds have been tested with GCC9.0 on Ubuntu 18.04 and Apple Clang 11.0.0 on OSX 10.15 (Catalina Beta)
+
+### Python Usage
+Here's some examples:
+
+```python
+>>> cld3.get_language("This is a test")
+LanguagePrediction(language='en', probability=0.9999980926513672, is_reliable=True, proportion=1.0)
+
+>>> cld3.get_frequent_languages("This piece of text is in English. Този текст е на Български.", 5)
+[LanguagePrediction(language='bg', probability=0.9173890948295593, is_reliable=True, proportion=0.5853658318519592), LanguagePrediction(language='en', probability=0.9999790191650391, is_reliable=True, proportion=0.4146341383457184)]
+```
+
+In short:
+- `get_language` returns the most likely language as the named tuple `LanguagePrediction`. Proportion is always 1.0 when called in this way.
+- `get_frequent_languages` will return the top number of guesses, up to a maximum specified (in the example, 5). The maximum is mandatory. Proportion will be set to the proportion of bytes found to be the target language in the list.
+
+In the normal cld3 library, "und" may be returned as a language for unknown languages (with no other stats given). This library filters that result out as extraneous; if the language couldn't be detected, nothing will be returned. This also means, as a consequence, `get_frequent_languages` may return fewer results than what you asked for, or none at all.
 
 ### Credits
 
